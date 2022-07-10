@@ -8,6 +8,10 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { userRequest } from "../requestMethods";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { removeProduct } from "../redux/cartRedux";
+
+
 const Container = styled.div``;
 
 const Wrapper = styled.div`
@@ -174,6 +178,7 @@ const Cart = () => {
   const [address, setaddress] = useState("")
   const [errorMessage, setErrorMessage] = useState('');
   let navigate = useNavigate();
+  const dispatch = useDispatch();
   function handleConfirm() {
     
     setPaid(prev => !prev)
@@ -189,6 +194,14 @@ const Cart = () => {
     else setErrorMessage('Please fill up your address');
   }
 
+  function handleRemove  (product , e , sign)   {
+    
+    e.preventDefault()
+     
+    dispatch(
+      removeProduct({ ...product , sign })
+    );
+  };
 
 
   return (
@@ -226,9 +239,9 @@ const Cart = () => {
                 </ProductDetail>
                 <PriceDetail>
                   <ProductAmountContainer>
-                    <Add />
+                    <Add onClick={(e) =>  handleRemove(product , e , 1)} style={{cursor: "pointer"}}/>
                     <ProductAmount>{product.quantity}</ProductAmount>
-                    <Remove />
+                    <Remove  onClick={(e) =>  handleRemove(product , e , -1)} style={{cursor: "pointer"}}/>
                   </ProductAmountContainer>
                   <ProductPrice>
                     Rs. {product.price * product.quantity}

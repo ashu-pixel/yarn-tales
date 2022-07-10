@@ -12,7 +12,8 @@ const Image = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  ${mobile({ height: "20vh" })}
+  opacity: 0.3;
+  ${mobile({ height: "20vh" })} 
 `;
 
 const Info = styled.div`
@@ -25,29 +26,25 @@ const Info = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-weight : bold ; 
 `;
 
 const Title = styled.h1`
-    color:white;
+    color:red;
     margin-bottom: 20px;
+    text-align : center ; 
+    letter-spacing: 3px;
+    
 `;
 
-const Button = styled.button`
-    border:none;
-    padding: 10px;
-    background-color: white;
-    color:gray;
-    cursor: pointer;
-    font-weight: 600;
-`;
-
+ 
 const CategoryItem = ({ item }) => {
   return (
     <Container>
       <Image src={item.img} />
       <Info>
         <Title>{item.title}</Title>
-        {/* <Button>SHOP NOW</Button> */}
+         
       </Info>
     </Container>
   );
