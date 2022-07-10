@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState  } from "react";
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import { Link, useNavigate } from "react-router-dom";
 import { publicRequest } from "../requestMethods";
+import { register } from "../redux/apiCalls";
+import { useDispatch , useSelector} from "react-redux";
 
 const Container = styled.div`
   width: 100vw;
@@ -78,10 +80,11 @@ const Register = () => {
   const [cpassword, setCpassword] = useState("")
   const [isEmpty, setisEmpty] = useState(true)
   const [message, setMessge] = useState("Please fill out all details")
-  let navigate = useNavigate();
+  const { error } = useSelector((state) => state.user);
 
+  const dispatch = useDispatch();
   useEffect(() => {
-    const check = async () => {
+    const check = () => {
       if (name !== "" && last !== "" && username !== "" && email !== "" && password !== "" && cpassword !== "") setisEmpty(false)
       else setisEmpty(true)
     };
@@ -89,20 +92,12 @@ const Register = () => {
   }, [name, last, username, email, password, cpassword]);
 
 
-  async function handleSubmit(e) {
-    e.preventDefault()
-    if (cpassword !== password) {
-      setMessge("Passwords do not match. Please enter same password")
-      setisEmpty(true)
-      return
-    } else {
-      try {
-        const {data:response} = await publicRequest.post("/auth/register", { username, email, password }) 
-        navigate("/") 
-      } catch (err) {
-        console.log(err)
-      }
-    }
+  function handleSubmit(e) {
+
+    e.preventDefault();
+    setisEmpty(true)
+    setMessge("")
+    register(dispatch, { username, password, email });
   }
 
   return (
@@ -120,8 +115,16 @@ const Register = () => {
             By creating an account, I consent to the processing of my personal
             data in accordance with the <b>PRIVACY POLICY</b>
           </Agreement>
-          {!isEmpty && <Button onClick={e => handleSubmit(e)}>CREATE</Button>}
+          {!isEmpty && <Button onClick={handleSubmit}>CREATE</Button>}
           {isEmpty && <Empty> {message}</Empty>}
+          {
+            error &&
+            <Empty>
+              User already registered.
+              <Button onClick={handleSubmit}><Link to="/login">Log in </Link></Button> 
+              to continue
+            </Empty>
+          }
 
         </Form>
       </Wrapper>
