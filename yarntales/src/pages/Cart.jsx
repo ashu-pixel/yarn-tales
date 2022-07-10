@@ -4,13 +4,12 @@ import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
-import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { userRequest } from "../requestMethods";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch , useSelector } from "react-redux";
 import { removeProduct } from "../redux/cartRedux";
-
+ 
 
 const Container = styled.div``;
 
@@ -179,6 +178,9 @@ const Cart = () => {
   const [errorMessage, setErrorMessage] = useState('');
   let navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const user = useSelector(state=>state.user)
+   
   function handleConfirm() {
     
     setPaid(prev => !prev)
@@ -272,7 +274,7 @@ const Cart = () => {
               <SummaryItemPrice>Rs. {cart.total}</SummaryItemPrice>
             </SummaryItem>
 
-            {cart.products.length > 0 && <Payment>
+            {cart.products.length > 0 && user.currentUser&& <Payment>
 
               <SummaryItem>
                 <SummaryItemText>Your Shipping Address</SummaryItemText>
@@ -309,6 +311,16 @@ const Cart = () => {
               )}
             </Payment>
             }
+
+            {
+              !user.currentUser && 
+              <SummaryItem type="total">
+                <SummaryItemText>Login to place your order</SummaryItemText>
+                <SummaryItemPrice><Link to="/login">Login</Link></SummaryItemPrice>
+              </SummaryItem>
+            }
+
+
           </Summary>
         </Bottom>
       </Wrapper>
