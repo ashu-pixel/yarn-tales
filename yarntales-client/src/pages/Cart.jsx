@@ -4,7 +4,7 @@ import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { mobile } from "../responsive";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { userRequest } from "../requestMethods";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,12 +22,7 @@ const Title = styled.h1`
   font-weight: 300;
   text-align: center;
 `;
-const Message = styled.h1`
-  font-weight: 500;
-  text-align: center;
-  font-size : 45px
-`;
-
+ 
 
 const Top = styled.div`
   display: flex;
@@ -224,7 +219,9 @@ const Cart = () => {
             address: address, 
             phone : phoneNos
           });
-           
+          
+          
+          
           dispatch( placeOrder());
 
           navigate("/success" );

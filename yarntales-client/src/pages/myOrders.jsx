@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import Order from "../components/Order";
 import { userRequest } from "../requestMethods";
-import { mobile } from "../responsive";
+ 
 
 const Container = styled.div``;
 const Wrapper = styled.div`
@@ -29,7 +29,7 @@ const MyOrders = () => {
             } catch { }
         };
         getProduct();
-    }, []);
+    }, [currentUser]);
 
 
 

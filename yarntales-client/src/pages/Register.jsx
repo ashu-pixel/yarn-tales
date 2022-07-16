@@ -1,8 +1,8 @@
 import { useEffect, useState  } from "react";
 import styled from "styled-components";
 import { mobile } from "../responsive";
-import { Link, useNavigate } from "react-router-dom";
-import { publicRequest } from "../requestMethods";
+import { Link   } from "react-router-dom";
+ 
 import { register } from "../redux/apiCalls";
 import { useDispatch , useSelector} from "react-redux";
 
