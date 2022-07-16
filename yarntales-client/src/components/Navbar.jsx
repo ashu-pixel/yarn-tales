@@ -97,8 +97,8 @@ const Navbar = () => {
         <Right>
           {!user.currentUser && <MenuItem> <Link to="/register">REGISTER</Link></MenuItem>}
           {!user.currentUser && <MenuItem><Link to="/login">SIGN IN</Link></MenuItem>}
-          {user.currentUser && <MenuItem onClick={e => logoff(e)}>Logout</MenuItem>}
-          {user.currentUser && <MenuItem><Link to="/">My Orders</Link></MenuItem>}
+          {user.currentUser && <MenuItem onClick={e => logoff(e)}> <Link to="/">Logout</Link></MenuItem>}
+          {user.currentUser && <MenuItem><Link to="/myOrders">My Orders</Link></MenuItem>}
           {user.currentUser && <MenuItem  >Hi {user.currentUser.username}</MenuItem>}
          <Link to="/cart">
          <MenuItem>

@@ -1,5 +1,5 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@material-ui/icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { sliderItems } from "../data";
 import { mobile } from "../responsive";
@@ -89,6 +89,13 @@ const Slider = () => {
     }
   };
 
+  useEffect(() => {
+    setInterval(() => {
+      setSlideIndex(indx => (indx+1)%3)
+    }, 5000);
+  }, []);
+
+
   return (
     <Container>
       <Arrow direction="left" onClick={() => handleClick("left")}>
@@ -103,7 +110,7 @@ const Slider = () => {
             <InfoContainer>
               <Title>{item.title}</Title>
               <Desc>{item.desc}</Desc>
-               
+
             </InfoContainer>
           </Slide>
         ))}
