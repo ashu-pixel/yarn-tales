@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import { userRequest } from "../../requestMethods";
 import "./widgetLg.css";
-import {format} from "timeago.js"
+import { format } from "timeago.js"
 
 export default function WidgetLg() {
   const [orders, setOrders] = useState([]);
+  const [statusType, setstatusType] = useState(["Pending", "Placed" , "Dispatched" , "Delivered"] )
+
 
   useEffect(() => {
     const getOrders = async () => {
       try {
         const res = await userRequest.get("orders");
         setOrders(res.data);
-      } catch {}
+      } catch { }
     };
     getOrders();
   }, []);
@@ -27,6 +29,7 @@ export default function WidgetLg() {
           <th className="widgetLgTh">Date</th>
           <th className="widgetLgTh">Amount</th>
           <th className="widgetLgTh">Status</th>
+          <th className="widgetLgTh">Action</th>
         </tr>
         {orders.map((order) => (
           <tr className="widgetLgTr" key={order._id}>
@@ -34,9 +37,19 @@ export default function WidgetLg() {
               <span className="widgetLgName">{order.userId}</span>
             </td>
             <td className="widgetLgDate">{format(order.createdAt)}</td>
-            <td className="widgetLgAmount">${order.amount}</td>
-            <td className="widgetLgStatus">
+            <td className="widgetLgAmount">Rs. {order.amount}</td>
+            <td>
               <Button type={order.status} />
+            </td>
+            <td className="widgetLgStatus">
+
+
+              <select  >
+                <option value="Pending">Pending</option>
+                <option value="Placed">Delivered</option>
+                <option value="Dispatched">Dispatched</option>
+                <option value="Delivered">Delivered</option>
+              </select>
             </td>
           </tr>
         ))}

@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 export default function NewProduct() {
   const [inputs, setInputs] = useState({});
   const [file, setFile] = useState(null);
-  const [cat, setCat] = useState([]);
+   
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -21,10 +21,7 @@ export default function NewProduct() {
       return { ...prev, [e.target.name]: e.target.value };
     });
   };
-  const handleCat = (e) => {
-    setCat(e.target.value.split(","));
-  };
-
+ 
   const handleClick = (e) => {
     e.preventDefault();
     const fileName = new Date().getTime() + file.name;
@@ -61,7 +58,7 @@ export default function NewProduct() {
         // Handle successful uploads on complete
         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          const product = { ...inputs, img: downloadURL, categories: cat };
+          const product = { ...inputs, img: downloadURL  };
           addProduct(product, dispatch);
         });
       }
@@ -103,21 +100,11 @@ export default function NewProduct() {
           <input
             name="price"
             type="number"
-            placeholder="100"
+            placeholder="800"
             onChange={handleChange}
           />
         </div>
-        <div className="addProductItem">
-          <label>Categories</label>
-          <input type="text" placeholder="jeans,skirts" onChange={handleCat} />
-        </div>
-        <div className="addProductItem">
-          <label>Stock</label>
-          <select name="inStock" onChange={handleChange}>
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-          </select>
-        </div>
+       
         <button onClick={handleClick} className="addProductButton">
           Create
         </button>

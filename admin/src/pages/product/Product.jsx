@@ -48,10 +48,7 @@ export default function Product() {
               <span className="productInfoKey">id:</span>
               <span className="productInfoValue">{product._id}</span>
             </div>
-            <div className="productInfoItem">
-              <span className="productInfoKey">sales:</span>
-              <span className="productInfoValue">10</span>
-            </div>
+            
             
           </div>
         </div>

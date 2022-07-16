@@ -1,7 +1,7 @@
 import { useEffect, useState  } from "react";
 import styled from "styled-components";
 import { mobile } from "../responsive";
-import { Link   } from "react-router-dom";
+import { Link  } from "react-router-dom";
  
 import { register } from "../redux/apiCalls";
 import { useDispatch , useSelector} from "react-redux";
@@ -116,7 +116,7 @@ const Register = () => {
             data in accordance with the <b>PRIVACY POLICY</b>
           </Agreement>
           {!isEmpty && <Button onClick={handleSubmit}>CREATE</Button>}
-          {isEmpty && <Empty> {message}</Empty>}
+          {isEmpty && !error && <Empty> {message}</Empty>}
           {
             error &&
             <Empty>
