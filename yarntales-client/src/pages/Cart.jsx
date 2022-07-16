@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { userRequest } from "../requestMethods";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { removeProduct } from "../redux/cartRedux";
+import { removeProduct , placeOrder } from "../redux/cartRedux";
 
 
 const Container = styled.div``;
@@ -183,14 +183,16 @@ color : red ;
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
+  const user = useSelector(state => state.user)
+  
   const [paid, setPaid] = useState(false)
   const [address, setaddress] = useState("")
   const [phoneNos, setphoneNos] = useState("+91-")
+  
   const [errorMessage, setErrorMessage] = useState('');
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const user = useSelector(state => state.user)
 
   function handleConfirm() {
 
@@ -198,6 +200,7 @@ const Cart = () => {
   }
   const handleAddress = (event) => {
     setaddress(event.target.value);
+     
     if (address !== "") setErrorMessage('');
   };
   const handlePhone = (event) => {
@@ -205,9 +208,29 @@ const Cart = () => {
     if (phoneNos !== "") setErrorMessage('');
   };
 
-  const routeChange = () => {
+  const routeChange = async () => {
 
-    if (address !== "" && phoneNos.length >= 10)  navigate("/success", { state: { cart, address } });
+    if (address.trim().length > 0 && phoneNos.trim().length >= 10) {
+
+      try {
+          const res = await userRequest.post("/orders", { 
+            
+            userId: user.currentUser._id,
+            products: cart.products.map((item) => ({
+              productId: item._id,
+              quantity: item.quantity,
+            })),
+            amount: cart.total,
+            address: address, 
+            phone : phoneNos
+          });
+           
+          dispatch( placeOrder());
+
+          navigate("/success" );
+        } catch {}
+
+    }
     else setErrorMessage('Please fill up your address and contact details');
   }
 
@@ -231,7 +254,7 @@ const Cart = () => {
 
           <TopTexts>
             <TopText>Your shopping bag has {cart.products.length || 0} items</TopText>
-
+          
           </TopTexts>
 
         </Top>
