@@ -7,13 +7,14 @@ import {
   Room,
 
 } from "@material-ui/icons";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { mobile } from "../responsive";
 const Container = styled.div`
   display: flex;
   ${mobile({ flexDirection: "column" })}
 `;
-
+ 
 const Left = styled.div`
   flex: 1;
   display: flex;
@@ -91,7 +92,8 @@ const Footer = () => {
         <SocialContainer>
 
           <SocialIcon color="E4405F">
-            <Instagram />
+            <a href="https://www.instagram.com/__yarntales__/"><Instagram /></a>
+             
           </SocialIcon>
 
           <SocialIcon color="E60023">

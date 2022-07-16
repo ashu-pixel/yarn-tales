@@ -7,9 +7,9 @@ import { mobile } from "../responsive";
 import { useEffect, useState } from "react";
 import { userRequest } from "../requestMethods";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch , useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { removeProduct } from "../redux/cartRedux";
- 
+
 
 const Container = styled.div``;
 
@@ -153,7 +153,8 @@ const SummaryItem = styled.div`
   justify-content: space-between;
   font-weight: ${(props) => props.type === "total" || "payment" && "500"};
   font-size: ${(props) => props.type === "total" && "24px"};
-  color: ${(props) => props.type === "payment" && "red"};
+  color: ${(props) => props.type === "payment" && "#00ac2b"};
+  text-align: ${(props) => props.type === "payment" && "center"};
 `;
 
 const SummaryItemText = styled.span``;
@@ -170,38 +171,52 @@ const Button = styled.button`
 
 const Payment = styled.div``;
 
+const Contact = styled.input`
+  padding : 5px ; 
+  
+`;
+const Mandatory = styled.span`
+color : red ; 
+`;
+
+
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
   const [paid, setPaid] = useState(false)
   const [address, setaddress] = useState("")
+  const [phoneNos, setphoneNos] = useState("+91-")
   const [errorMessage, setErrorMessage] = useState('');
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const user = useSelector(state=>state.user)
-   
+  const user = useSelector(state => state.user)
+
   function handleConfirm() {
-    
+
     setPaid(prev => !prev)
   }
   const handleAddress = (event) => {
     setaddress(event.target.value);
-    if(address !== "") setErrorMessage('');
+    if (address !== "") setErrorMessage('');
+  };
+  const handlePhone = (event) => {
+    setphoneNos(event.target.value);
+    if (phoneNos !== "") setErrorMessage('');
   };
 
   const routeChange = () => {
 
-    if (address !== "") navigate("/success", { state: { cart, address } });
-    else setErrorMessage('Please fill up your address');
+    if (address !== "" && phoneNos.length >= 10)  navigate("/success", { state: { cart, address } });
+    else setErrorMessage('Please fill up your address and contact details');
   }
 
-  function handleRemove  (product , e , sign)   {
-    
+  function handleRemove(product, e, sign) {
+
     e.preventDefault()
-     
+
     dispatch(
-      removeProduct({ ...product , sign })
+      removeProduct({ ...product, sign })
     );
   };
 
@@ -241,9 +256,9 @@ const Cart = () => {
                 </ProductDetail>
                 <PriceDetail>
                   <ProductAmountContainer>
-                    <Add onClick={(e) =>  handleRemove(product , e , 1)} style={{cursor: "pointer"}}/>
+                    <Add onClick={(e) => handleRemove(product, e, 1)} style={{ cursor: "pointer" }} />
                     <ProductAmount>{product.quantity}</ProductAmount>
-                    <Remove  onClick={(e) =>  handleRemove(product , e , -1)} style={{cursor: "pointer"}}/>
+                    <Remove onClick={(e) => handleRemove(product, e, -1)} style={{ cursor: "pointer" }} />
                   </ProductAmountContainer>
                   <ProductPrice>
                     Rs. {product.price * product.quantity}
@@ -274,16 +289,21 @@ const Cart = () => {
               <SummaryItemPrice>Rs. {cart.total}</SummaryItemPrice>
             </SummaryItem>
 
-            {cart.products.length > 0 && user.currentUser&& <Payment>
+            {cart.products.length > 0 && user.currentUser && <Payment>
 
               <SummaryItem>
-                <SummaryItemText>Your Shipping Address</SummaryItemText>
+                <SummaryItemText>Your Shipping Address  <Mandatory>*</Mandatory> </SummaryItemText>
                 <textarea cols="23" rows="3" style={{ resize: "none" }} onChange={handleAddress}
                   placeholder="Please enter valid address with pincode" required></textarea>
               </SummaryItem>
+              <SummaryItem>
+                <SummaryItemText>Mobile Number <Mandatory>*</Mandatory> </SummaryItemText>
+                <Contact type="text"  onChange={handlePhone}
+                  placeholder="Delivery updates" required value={phoneNos} maxLength="14"></Contact>
+              </SummaryItem>
 
               <SummaryItem type="payment">
-                <SummaryItemText >
+                <SummaryItemText   >
                   Please pay Rs.{cart.total} to below UPI ID to confirm your order.
                   <br />
                   Any incorrect amount or wrong address will lead to cancelling of order and money will be transfered back
@@ -313,7 +333,7 @@ const Cart = () => {
             }
 
             {
-              !user.currentUser && 
+              !user.currentUser &&
               <SummaryItem type="total">
                 <SummaryItemText>Login to place your order</SummaryItemText>
                 <SummaryItemPrice><Link to="/login">Login</Link></SummaryItemPrice>
